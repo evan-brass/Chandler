@@ -1,0 +1,134 @@
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:400,700);
+body, html {
+	font-family: "Open Sans";
+	margin: 0;
+	padding: 0;
+	background-color: #7F7F7F;
+	width: 100%;
+	height: 100%;
+}
+/* Note Stuff */
+#notes-container {
+	z-index: 50;
+	position: fixed;
+	box-sizing: border-box;
+	right: 0;
+	height: 100%;
+	width: 350px;
+	padding-bottom: 150px;
+	background-color: #404040;
+}
+#notes-input {
+	display: block;
+	border: none;
+	padding: 5px;
+	box-sizing: border-box;
+	min-height: 50px;
+	max-height: 150px;
+	overflow-y: auto;
+	line-break: strict;
+	background-color: #FFFFFF;
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+	line-height: 50px;
+	font-size: 30px;
+	color: #404040;
+}
+#notes-display {
+	height: 100%;
+}
+.notes-note {
+	background-color: #fff;
+	border: 1px solid #333;
+	padding: 10px;
+}
+.notes-note a {
+	visibility: hidden;
+}
+.notes-note:hover a {
+	visibility: visible;
+}
+/* Carousel stuff */
+main {
+	position: fixed;
+	left: 0;
+	top: 0;
+	width: calc(100% - 350px);
+	height: 100%;
+}
+#primary-navigation {
+	margin: 5px auto;
+	text-align: center;
+	height: 50px;
+}
+#carousel {
+	position: absolute;
+	height: calc(100% - 50px);
+	transition: all 2s ease 0s;
+	left: 0%;
+	width: 200%;
+}
+#carousel.Calendar, #carousel.calendar {
+	left: 0;
+}
+#carousel.Tasks, #carousel.tasks {
+	left: -100%;
+}
+#carousel section {
+	display: inline-block;
+	width: 50%;
+	height: 100%;
+	float: left;
+}
+#carousel section h1 {
+	height: 60px;
+	padding: 10px;
+	box-sizing: border-box;
+	margin: 0;
+}
+/* Calendar Stuff*/
+table#calendar {
+	width: 100%;
+	height: calc(100% - 60px);
+	border-collapse: collapse;
+}
+table#calendar tbody {
+	width: 100%;
+	height: 100%;
+}
+#calendar thead tr {
+	height: auto;
+}
+#calendar tr {
+	height: 19%;
+}
+#calendar td {
+	border: 1px solid #222;
+	width: 14.27%;
+	vertical-align: top;
+}
+#calendar td ul {
+	margin: 0;
+	padding: 0;
+}
+#calendar li {
+	list-style: none;
+}
+/* - Dialogs */
+.front-and-center {
+	background-color: #fff;
+	box-sizing: border-box;
+	position: fixed;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
+	min-width: 200px;
+	max-width: 80%;
+	min-height: 200px;
+	max-height: 100%;
+	overflow-y: auto;
+	width: auto;
+	height: auto;
+	padding: 50px;
+}

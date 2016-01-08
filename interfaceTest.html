@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Interface Library Test</title>
+
+
+		<script src="/Development/utils/js/underscore/underscore.js"></script>
+		<script src="js/repository.js"></script>
+
+		<script src="js/collection.js"></script>
+
+		<script src="js/view.js"></script>
+
+		<script src="js/userinterface.js"></script>
+		<style>
+		</style>
+	</head>
+	<body>
+		<button onclick="javascript: userinterface.windows.dialog('The default message', 'The default title', 'ok');">Ok</button>
+		<button onclick="javascript: userinterface.windows.dialog('The default message', 'The default title', 'yes no');">Yes No</button>
+		<button onclick="javascript: userinterface.windows.dialog('The default message', 'The default title', 'done cancel');">Done Cancel</button>
+
+		<script>
+			var primaryWindow = new Window();
+			primaryWindow.addView(new View());
+		</script>
+	</body>
+</html>

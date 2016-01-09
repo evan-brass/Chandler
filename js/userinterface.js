@@ -3,16 +3,98 @@
 /**
  * The LayoutItem is a data structure that is used to render a window.  It has width and height information which transfers to the container
  */
-function LayoutItem(view, neightbors){
-	this.neigbors = neightbors || {left: null, right: null, up: null, down: null};
+function LayoutItem(view, neighbors, size, position){
+	if(!LayoutItem.prototype.stylesLoaded){
+		var styles = {"LayoutItem":
+			".LayoutItem{" +
+				"border: 1px solid black;" +
+				"box-sizing: border-box;" +
+			"}"
+		};
+		for (var handle in styles) {
+			userinterface.styler.addStyle(handle, styles[handle]);
+		}
+		Window.prototype.stylesLoaded = true;
+	}
+	this.neighbors = neighbors || {"left": [], "right": [], "up": [], "down": []};
+	this.position = position || {"left": 0, "top": 0};
+	this.size = size || {"width": 100, "height": 100};
+	this.element = document.createElement("div");
+	this.element.className = "LayoutItem";
 
-	this.view = view;
+	this.view = view || false;
+	this.render();
 	RepositoryItem.call(this);
 }
 LayoutItem.prototype = Object.create(RepositoryItem.prototype);
+LayoutItem.prototype.stylesLoaded = false;
 LayoutItem.constructor = LayoutItem;
+LayoutItem.prototype.resize = function(width, height){
+	width = width || this.size.width;
+	height = height || this.size.height;
+	this.size = {"width": width, "height": height};
+};
+LayoutItem.prototype.reposition = function(left, top){
+	left = left || this.position.left;
+	top = top || this.position.top;
+	this.position = {"left": left, "top": top};
+};
+LayoutItem.prototype.split = function(direction){
+	/** warning
+	 * This section is going to get really complicated.  This is why I hate user interface stuff, it makes my head hurt.
+	 */
+	switch(direction){
+		case "horizontal":
+			// We have more than 1 neighbor on top but the bottom has 1 neighbor or less
+			if(this.neighbors.up.length > 1 && this.neighbors.down.length <= 1){
+				// Do we have an even number of neighbors up?
+				if(this.neighbors.up.length % 2 == 0){
+					// If so than we should split to match the layout of the items above (split between the center items (not neccessarily the center of this item))
+					var rightIndex = this.neighbors.up.length/2;
+					var leftSide = this; // The original layoutItem becomes the new left side;
+					var rightWidth = 0;
+					for(var i = rightIndex; i < this.neighbors.up.length; ++i){
+						rightWidth += this.neighbors.up[i].size.width;
+					}
+					var leftWidth = 0;
+					for(var i = 0; i < rightIndex; ++i){
+						leftWidth += this.neighbors.up[i].size.width;
+					}
+					var rightSide = new LayoutItem(false,
+						{
+							"left": leftSide,
+							"right": this.neighbors.right,
+							"up": this.neighbors.up.slice(rightIndex, this.neighbors.up.length),
+							"down": this.neighbors.down
+						}, {
+							"width": rightWidth,
+							"height": this.size.height
+						}, {
+							"left": this.neighbors.up[rightIndex].position.left,
+							"top": this.position.top
+						});
+				}
+			}
+		break;
+		case "horizontal":
+
+		break;
+		default:
+		var er = new Error("LayoutItem: Unable to split along " + direction);
+		console.log(er);
+		return er;
+		break;
+	}
+};
 LayoutItem.prototype.render = function(){
-	this.view.render();
+	this.element.style.top = this.position.top + "px";
+	this.element.style.left = this.position.left + "px";
+	this.element.style.width = this.size.width + "px";
+	this.element.style.height = this.size.height + "px";
+
+	if(this.view){
+		this.view.render();
+	}
 };
 
 /**
@@ -20,8 +102,21 @@ LayoutItem.prototype.render = function(){
  * For example, it might be worth having a few different windows for the main screen,
  */
 function Window(element, width, height){
+	if(!Window.prototype.stylesLoaded){
+		var styles = {"Window":
+			".Window{" +
+				"border: 1px solid black;" +
+				"box-sizing: border-box;" +
+			"}"
+		};
+		for (var handle in styles) {
+			userinterface.styler.addStyle(handle, styles[handle]);
+		}
+		Window.prototype.stylesLoaded = true;
+	}
 	if(!element){
 		this.element = document.createElement("div");
+		this.element.className = "Window";
 		document.body.appendChild(this.element);
 	} else {
 		this.element = element;
@@ -30,21 +125,30 @@ function Window(element, width, height){
 	this.height = height || 900;
 	this.element.style.width = this.width + "px";
 	this.element.style.height = this.height + "px";
-	this.layout = {};
+	this.layout = [];
 
 	this.render();
 	RepositoryItem.call(this);
 }
 Window.prototype = Object.create(RepositoryItem.prototype);
 Window.constructor = Window;
+Window.prototype.stylesLoaded = false;
+Window.prototype.addView = function(){
+	this.addLayoutItem(new LayoutItem());
+};
 Window.prototype.addLayoutItem = function(item){
-	this.layout[item.id] = item;
+	this.layout.push(item);
+	this.element.appendChild(item.element);
 };
-Window.prototype.addView = function(view){
-	this.addLayoutItem(new LayoutItem(view));
-};
-Window.prototype.removeView = function(view){
-
+Window.prototype.removeLayoutItem = function(item){
+	if(this.layout.indexOf(item) != -1){
+		this.layout.splice(this.layout.indexOf(item), 1);
+		this.element.removeChild(item.element);
+	} else {
+		var er = new Error("Window: I can't remove a LayoutItem that I don't have.");
+		console.log(er);
+		return er;
+	}
 };
 Window.prototype.resizeBorder = function(borderId){
 

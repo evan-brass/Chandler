@@ -126,6 +126,7 @@ function Window(element, width, height){
 	this.element.style.width = this.width + "px";
 	this.element.style.height = this.height + "px";
 	this.layout = [];
+	//this.addView(new LayoutItem());
 
 	this.render();
 	RepositoryItem.call(this);

@@ -1,27 +1,31 @@
 'use strict';
 
 function Collection(filterName, filterArguments){
+	RepositoryItem.call(this);
 	this.filterName = filterName || "FilterGetAll"; // The default collection is everything in the repository.
 	this.filterArguments = filterArguments || []; // The default filter function doesn't require any arguments.
-	this.items = []; // No items until the collection is updated.
-	RepositoryItem.call(this);
+	Object.defineProperty(this, "items", {
+		value: [],
+		writable: true,
+		configurable: false,
+		enumerable: false,
+	});
+	this.repository.on('change', this.update.bind(this));
 }
 Collection.prototype = Object.create(RepositoryItem.prototype);
 Collection.constructor = Collection;
-Collection.prototype.update = function(){
-	this.items = Repository.everything().filter(this[this.filterName].apply(null, this.filterArguments)); // Filter through every item in the repository to get our items
-	for(var i = 0; i < this.items.length; ++i){
-		this.items[i].prototype = RepositoryItem.prototype;
+Eventable(Collection);
+Collection.prototype.update = function(input){
+	var previousItems = this.items.slice();
+	input = input || this.repository.everything();
+	this.items = input.filter(this[this.filterName].apply(null, this.filterArguments)); // Filter through every item in the repository to get our items
+	if(!_.isEqual(this.items, previousItems)){
+		this.trigger("change");
 	}
 };
-Collection.prototype.toJSON = function(){ // We need to make sure that the items array isn't saved to the repository because this would cause an exponential increase in size.
-	var temp = {};
-	for (var key in this){
-		if(this.hasOwnProperty(key)) temp[key] = this[key];
-	}
-	delete temp.items;
-	return temp;
-};
+typeManager.registerType("Collection", Collection, {"filterName": "somename", "filterArguments": "someargs"});
+// I've removed the toJSON function.  As long as all variables that shouldn't
+// appear in the Stringify object should be added using Object.prototype with enumerable equal to false.
 
 
 /**

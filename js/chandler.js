@@ -5,11 +5,12 @@
  */
 function Note(){
 	this.type = "note";
-
+	this.content = "";
 	RepositoryItem.call(this);
 }
 Note.prototype = Object.create(RepositoryItem.prototype);
 Note.constructor = Note;
+typeManager.registerType("Note", Note, {type: "note", content: ""});
 Note.prototype.makeNote = function(object){
 	var temp = _.extend({
 		id: "A problem occured while converting to a note", // The id and content are the only two required properties other than making sure that the type is
@@ -34,33 +35,34 @@ window.chandler = {
 		}
 	},
 	initialize: function(){
-		calendar.initialize();
+		//calendar.initialize();
 
 		this.input = document.getElementById("notes-input");
 		this.notesElement = document.getElementById("notes-display");
 		this.notes = new Collection("FilterGetWhereTypeIs", ["note"]); // FilterGetWhereTypeIs only takes one argument ("note") which is the type we are keeping.
-		this.updateNotes();
+		this.notes.on('change', this.updateNotes.bind(this));
+		this.notes.update();
 		this.input.addEventListener('keydown', this.inputHandler.bind(this));
 
-		this.setupCarousel();
+//		this.setupCarousel();
 	},
 	updateNotes: function(){
-		this.notes.update();
 		this.notesElement.innerHTML = "";
 		this.notes.items.forEach(function(item, index, array){
 			var element = document.createElement("div");
 			element.className = "notes-note";
 			element.innerHTML = item.content +
 			" <a href=\"javascript:chandler.deleteObject('" + item.id + "')\">delete</a>" +
-			" <a href=\"javascript:chandler.makeEvent('" + item.id + "')\">make event</a>";
+//			" <a href=\"javascript:chandler.makeEvent('" + item.id + "')\">make event</a>" +
+			"";
 			this.notesElement.appendChild(element);
 		}, this);
 	},
 	deleteObject: function(id){
-		var noteToDelete = new Note();
+		var noteToDelete = new RepositoryItem();
 		noteToDelete.id = id;
+		noteToDelete.fetch();
 		noteToDelete.destroy();
-		chandler.updateNotes();
 	},
 	makeEvent: function(id){
 		var noteToMakeEvent = new Note();

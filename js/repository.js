@@ -1,116 +1,89 @@
 'use strict';
 
-function generateUUID() {
-    var d = new Date().getTime();
-    var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-        var r = (d + Math.random()*16)%16 | 0;
-        d = Math.floor(d/16);
-        return (c=='x' ? r : (r&0x3|0x8)).toString(16);
-    });
-    return uuid;
-};
-
-window.Repository = (function(){
-	/* View stuff */
-	var views = []; // Currently, every view will be updated for every change to the repository.
-	function updateViews(){
-		for (var i = 0; i < views.length; ++i){
-			var view = views[i];
-			view.render();
-		}
-	}
-
-	/* Item Functions */
-	function saveItem(item){
+function Repository(id){
+	this.id = id || "Primary Repository";
+	this.generateUUID = function() { // doesn't affect the repository: no change event
+	    var d = new Date().getTime();
+	    var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+	        var r = (d + Math.random()*16)%16 | 0;
+	        d = Math.floor(d/16);
+	        return (c=='x' ? r : (r&0x3|0x8)).toString(16);
+	    });
+	    return uuid;
+	};
+	this.updateCollections = function(){ // doesn't affect the repository: no change event
+		this.trigger('change', this.everything());
+	};
+	this.saveItem = function(item){ // This does affect the repository: fire a change event
 		localStorage.setItem(item.id, JSON.stringify(item));
-		updateViews();
-	}
-	function fetchItem(id){
+		this.updateCollections();
+	};
+	this.fetchItem = function(id){ // doesn't affect the repository: no change event
 		var item = localStorage.getItem(id);
 		if(item == null){
 			console.log("Error, no item to fetch");
 			return {};
 		} else {
-			return JSON.parse(item);
-		}
-	}
-	function destroyItem(id){
-		localStorage.removeItem(id);
-		updateViews();
-	}
-
-	// Everything returns every item in the repository.  It is used by collections to filter items into their array of items.
-	function everything(){
-		var array = [];
-		for(var i = 0; i < localStorage.length; ++i){
-			array.push(JSON.parse(localStorage.getItem(localStorage.key(i))));
-		}
-		return array;
-	}
-
-	/* Debug Options */
-	function repoDump(){
-		for(var i = 0; i < localStorage.length; ++i){
-			console.log(localStorage.getItem(localStorage.key(i)));
-		}
-	}
-	function repoClear(){
-		localStorage.clear();
-		updateViews();
-	}
-
-	return {
-		/* View Interface */
-		"registerViewRenderer": function(func){
-			views.push(func);
-		},
-		"unregisterViewRenderer": function(func){
-			var index;
-			if((index = viewRenderers.indexOf(func)) != -1){
-				views.slice(index, index + 1);
-			}
-		},
-
-		/* Item Interface */
-		"saveItem" : function(item){
-			saveItem(item);
-		},
-		"fetchItem" : function(id){
-			return fetchItem(id);
-		},
-		"destroyItem" : function(id){
-			destroyItem(id);
-		},
-
-		// Used by collections
-		"everything" : function(){
-			return everything();
-		},
-
-		/* Debug Interface */
-		"debug" : {
-			"dump" : function(){
-				repoDump();
-			},
-			"clear" : function(){
-				repoClear();
-			},
+			var temp = JSON.parse(item);
+			temp.id = id;
+			return temp;
 		}
 	};
-})();
+	this.destroyItem = function(id){ // This does affect the repository: fire a change event
+		localStorage.removeItem(id);
+		this.updateCollections();
+	};
+	this.everything = function(){ // doesn't affect the repository: no change event
+		var array = [];
+		for(var i = 0; i < localStorage.length; ++i){
+			array.push(typeManager.parse(this.fetchItem(localStorage.key(i))));
+		}
+		return array;
+	};
+	this.debug = {
+		dump: function(){
+			for(var i = 0; i < localStorage.length; ++i){
+				console.log(localStorage.key(i)+localStorage.getItem(localStorage.key(i)));
+			}
+		},
+		clear: function (){
+			localStorage.clear();
+		},
+		usage: function(){
+
+		},
+	};
+
+}
+Repository.prototype = {};
+Repository.constructor = Repository;
+Eventable(Repository);
+// Here we are creating the primary repository.
+window.repository = new Repository();
 
 /**
  * Anything that goes into the repository must inherit Repository Item.  It is the fundamental interface to the repository.
  */
-function RepositoryItem(){
-	this.id = generateUUID();
+function RepositoryItem(repository){
+	Object.defineProperty(this, "repository", {
+		value: repository || window.repository,
+		writable: true,
+		enumerable: false
+	});
+	this.repository = repository || window.repository;
+	Object.defineProperty(this, "id", {
+		value: this.repository.generateUUID(),
+		writable: true,
+		enumerable: false
+	});
 }
+//typeManager.registerType("RepositoryItem", RepositoryItem, {}); // The sample is {} because anything that isn't something else is a repository item.
 RepositoryItem.prototype.save = function(){
-	Repository.saveItem(this);
+	this.repository.saveItem(this);
 };
 RepositoryItem.prototype.fetch = function(){
-	_.extend(this, Repository.fetchItem(this.id));
+	_.extend(this, this.repository.fetchItem(this.id));
 };
 RepositoryItem.prototype.destroy = function(){
-	Repository.destroyItem(this.id);
+	this.repository.destroyItem(this.id);
 };

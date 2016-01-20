@@ -4,31 +4,26 @@
 		<title>Interface Library Test</title>
 
 		<script src="/Development/utils/js/underscore/underscore.js"></script>
+		<script src="js/loader.js"></script>
 
-		<script src="js/types.js"></script>
-
-		<script src="js/events.js"></script>
-
-		<script src="js/repository.js"></script>
-
-		<script src="js/collection.js"></script>
-
-		<script src="js/view.js"></script>
-
-		<script src="js/widget.js"></script>
-
-		<script src="js/userinterface.js"></script>
 		<style>
+			body, html{
+				height: 100%;
+				width: 100%;
+				margin: 0;
+				padding: 0;
+			}
 		</style>
 	</head>
 	<body>
-		<button onclick="javascript: userinterface.windows.dialog('The default message', 'The default title', 'ok');">Ok</button>
-		<button onclick="javascript: userinterface.windows.dialog('The default message', 'The default title', 'yes no');">Yes No</button>
-		<button onclick="javascript: userinterface.windows.dialog('The default message', 'The default title', 'done cancel');">Done Cancel</button>
 
 		<script>
-			var primaryWindow = new Window();
-			primaryWindow.addLayoutItem(new LayoutItem(false, {}, {"width": primaryWindow.width, "height": primaryWindow.height}, {"left": 0, "top": 0}));
+			loader.load('deps.json').then(function(){
+				var primaryWindow = new Window(false, "Chandler");
+				var tabs = new LayoutTabs(["Calendar", "Tasks", "Notes"]);
+				primaryWindow.addLayout(tabs);
+				primaryWindow.render();
+			});
 		</script>
 	</body>
 </html>

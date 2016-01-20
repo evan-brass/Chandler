@@ -11,14 +11,6 @@ function Note(){
 Note.prototype = Object.create(RepositoryItem.prototype);
 Note.constructor = Note;
 typeManager.registerType("Note", Note, {type: "note", content: ""});
-Note.prototype.makeNote = function(object){
-	var temp = _.extend({
-		id: "A problem occured while converting to a note", // The id and content are the only two required properties other than making sure that the type is
-		content: "",										// properly set to "note".  This should be made a lot smarter (maybe some common parser type thing?)
-	}, object);
-	temp.type = "note";
-	return temp;
-};
 
 window.chandler = {
 	input: null,
@@ -43,8 +35,6 @@ window.chandler = {
 		this.notes.on('change', this.updateNotes.bind(this));
 		this.notes.update();
 		this.input.addEventListener('keydown', this.inputHandler.bind(this));
-
-//		this.setupCarousel();
 	},
 	updateNotes: function(){
 		this.notesElement.innerHTML = "";
@@ -53,7 +43,6 @@ window.chandler = {
 			element.className = "notes-note";
 			element.innerHTML = item.content +
 			" <a href=\"javascript:chandler.deleteObject('" + item.id + "')\">delete</a>" +
-//			" <a href=\"javascript:chandler.makeEvent('" + item.id + "')\">make event</a>" +
 			"";
 			this.notesElement.appendChild(element);
 		}, this);
@@ -72,25 +61,6 @@ window.chandler = {
 		calendar.dialogs.createEvent(noteToMakeEvent);
 
 		//calendar.renderCalendar(); // We shouldn't need this any more, the calendar has a view
-	},
-	// This is for the primary navigation and the carousel
-	setupCarousel: function(){
-		this.carousel = document.getElementById("carousel");
-		var maybeLinks = document.getElementById("primary-navigation").children;
-		var links = new Array();
-		for(var i = 0; i < maybeLinks.length; ++i){
-			var child = maybeLinks.item(i);
-			if(child.tagName == "a" || child.tagName == "A"){
-				links.push(child);
-			}
-		}
-		links.forEach(function(item, index, array){
-			item.addEventListener("click", this.setCarousel.bind(this));
-		}, this);
-	},
-	setCarousel: function(e){
-		var newClassName = e.target.innerHTML;
-		this.carousel.className = newClassName;
 	},
 };
 setTimeout(chandler.initialize.bind(chandler), 500);

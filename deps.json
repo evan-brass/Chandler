@@ -48,5 +48,10 @@
 		"src" : "js/window.js",
 		"dependencies" : ["UserInterface"],
 		"loadingMessage" : "Loading Widget..."
+	},
+	"Tasks" : {
+		"src" : "js/tasks.js",
+		"dependencies" : ["View", "Widget", "Repository", "UserInterface", "Types"],
+		"loadingMessage" : "Loading the tasks system..."
 	}
 }

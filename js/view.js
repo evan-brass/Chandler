@@ -5,7 +5,7 @@
 // Instead, views will need to be created every time that the program needs them.
 
 function View(name){
-	this.name = name || "Un Named View";
+	this.name = name || "Unnamed View";
 	this.element = this.element || document.createElement('div');
 }
 View.prototype = {};
@@ -14,3 +14,4 @@ View.constructor = View;
 View.prototype.render = function(){
 	alert("Render function was not overloaded.");
 };
+

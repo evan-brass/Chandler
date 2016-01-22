@@ -8,6 +8,7 @@ function Window(element, title) {
 	if (!Window.prototype.stylesLoaded) {
 		var styles = {
 			"Window" : ".window{" +
+					"font-family: \"Open Sans\";" +
 					"height: 100%;" +
 					"box-sizing: border-box;" +
 				"}" +

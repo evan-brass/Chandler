@@ -82,6 +82,7 @@ TypeManager.prototype.whatIs = function(object) {
 					wereGood = true;
 				} else {
 					wereGood = false;
+					break;
 				}
 			} else {
 				wereGood = false;

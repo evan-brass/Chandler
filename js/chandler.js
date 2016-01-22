@@ -10,7 +10,7 @@ function Note(){
 }
 Note.prototype = Object.create(RepositoryItem.prototype);
 Note.constructor = Note;
-typeManager.registerType("Note", Note, {type: "note", content: ""});
+typeManager.registerType("Note", Note, {type: "note", content: false});
 
 window.chandler = {
 	input: null,
@@ -29,12 +29,14 @@ window.chandler = {
 	initialize: function(){
 		//calendar.initialize();
 
+		/*
 		this.input = document.getElementById("notes-input");
 		this.notesElement = document.getElementById("notes-display");
 		this.notes = new Collection("FilterGetWhereTypeIs", ["note"]); // FilterGetWhereTypeIs only takes one argument ("note") which is the type we are keeping.
 		this.notes.on('change', this.updateNotes.bind(this));
 		this.notes.update();
 		this.input.addEventListener('keydown', this.inputHandler.bind(this));
+//		*/
 	},
 	updateNotes: function(){
 		this.notesElement.innerHTML = "";

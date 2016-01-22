@@ -3,9 +3,9 @@
 window.userinterface = {
 	color : {
 		pallete : {
-			"accents" : ["2978a0"],
-			"base" : "F0F2EF",
-			"text" : "5C5346",
+			"accents" : ["e77245"],
+			"base" : "f2f2f2",
+			"text" : "616163",
 		},
 		getBase : function() {
 			return "#" + this.pallete.base;
@@ -26,7 +26,13 @@ window.userinterface = {
 		loadStyles : function() {
 			var dialogAccent = userinterface.color.getAnAccent();
 			var styles = {
-				"windows-fonts" : "@import url(https://fonts.googleapis.com/css?family=Open+Sans:400,700);",
+		/*
+				"Reset" : "html, body{" +
+						"margin: 0;" +
+						"padding: 0;" +
+						"background-color: " + userinterface.color.getBase() + ";" +
+					"}",
+//		*/
 				"windows-dialogs" : ".dialog{" +
 						"color: " + userinterface.color.getText() + ";" +
 						"overflow: hidden;" +
@@ -207,8 +213,9 @@ window.userinterface = {
 					var okButton = document.createElement("button");
 					okButton.className = "ok";
 					okButton.innerHTML = "Ok";
-					okButton.addEventListener('click', function(resolve, cleanup, validate, dialogContainer) {
-						if(validate(dialogContainer)){ // Validate should edit the contents of the dialog to reflect and invalid fields
+					okButton.addEventListener('click', function(resolve, cleanup, validate, dialogContainer, e) {
+						e.preventDefault();
+						if(validate(dialogContainer)){ // Validate should edit the contents of the dialog to reflect any invalid fields
 							cleanup();
 							resolve('ok');
 						}
@@ -220,7 +227,8 @@ window.userinterface = {
 					var doneButton = document.createElement("button");
 					doneButton.className = "done";
 					doneButton.innerHTML = "Done";
-					doneButton.addEventListener('click', function(resolve, cleanup, validate, dialogContainer) {
+					doneButton.addEventListener('click', function(resolve, cleanup, validate, dialogContainer, e) {
+						e.preventDefault();
 						if(validate(dialogContainer)){
 							cleanup();
 							resolve('done');
@@ -233,7 +241,8 @@ window.userinterface = {
 					var yesButton = document.createElement("button");
 					yesButton.className = "yes";
 					yesButton.innerHTML = "Yes";
-					yesButton.addEventListener('click', function(resolve, cleanup, validate, dialogContainer) {
+					yesButton.addEventListener('click', function(resolve, cleanup, validate, dialogContainer, e) {
+						e.preventDefault();
 						if(validate(dialogContainer)){
 							cleanup();
 							resolve('yes');
@@ -422,5 +431,11 @@ window.userinterface = {
 				}
 			}
 		},
+		loadStyles: function(){
+			this.addStyle("font-awesome", '@import url("http://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css");');
+			this.addStyle("windows-fonts", "@import url(https://fonts.googleapis.com/css?family=Open+Sans:400,700);");
+		},
 	},
 };
+userinterface.styler.loadStyles();
+userinterface.windows.loadStyles();

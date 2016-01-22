@@ -23,10 +23,10 @@ window.loader = {
 	},
 	startLoader: function(message){
 		this.styles = document.createElement('style');
-		this.styles.innerHTML = "@import url(https://fonts.googleapis.com/css?family=Open+Sans);html{font-family:\"Open Sans\",sans-serif}@keyframes bounce{0%,100%{bottom:0}50%{bottom:40px}}#overlay{background-color:#1e1e24;position:fixed;width:100%;height:100%;left:0;top:0;z-index:100}#loader{z-index:101;color:#2978a0;text-align:center;position:fixed;left:50%;top:50%;transform:translate(-50%,-50%)}.ball{animation:bounce 1s infinite linear;position:relative;display:inline-block;margin:5px;background-color:#2978a0;border-radius:50%;width:30px;height:30px}.ball:nth-child(1){animation-delay:0}.ball:nth-child(2){animation-delay:.2s}.ball:nth-child(3){animation-delay:.4s}";
+		this.styles.innerHTML = "@import url(https://fonts.googleapis.com/css?family=Open+Sans);html{font-family:\"Open Sans\",sans-serif}@keyframes bounce{0%,100%{bottom:0}50%{bottom:40px}}#overlay{background-color: #555;z-index: 100;position: fixed;top: 0;left: 0;width: 100%;height: 100%;}#loader{z-index:101;color:#2978a0;text-align:center;position:fixed;left:50%;top:50%;transform:translate(-50%,-50%)}.ball{animation:bounce 1s infinite linear;position:relative;display:inline-block;margin:5px;background-color:#2978a0;border-radius:50%;width:30px;height:30px}.ball:nth-child(2){animation-delay:.2s}.ball:nth-child(3){animation-delay:.4s}";
 		document.body.appendChild(this.styles);
 		this.overlay = document.createElement('div');
-		this.overlay.id = "overlay";
+		this.overlay.id = "loader-overlay";
 		document.body.appendChild(this.overlay);
 		this.loader = document.createElement('div');
 		this.loader.id = "loader";

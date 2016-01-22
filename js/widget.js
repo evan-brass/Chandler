@@ -4,13 +4,13 @@ function Widget() {
 		this.element = document.createElement('div');
 	}
 	this.element.className += " widget";
-	if(!Widget.prototype.stylesLoaded){
-		Widget.prototype.loadStyles();
+	if(!Widget.prototype.widgetStylesLoaded){
+		Widget.prototype.loadWidgetStyles();
 	}
 }
 Widget.prototype = {};
 Widget.stylesLoaded = false;
-Widget.prototype.loadStyles = function(){
+Widget.prototype.loadWidgetStyles = function(){
 	var styles = {
 		"Widgets" : ".widget{" +
 				"font-family: 'Open Sans', sans-serif;" +
@@ -20,6 +20,10 @@ Widget.prototype.loadStyles = function(){
 	for (var handle in styles) {
 		userinterface.styler.addStyle(handle, styles[handle]);
 	}
+	Widget.prototype.widgetStylesLoaded = true;
+};
+Widget.prototype.render = function(){
+
 };
 
 /**
@@ -100,7 +104,7 @@ MenuWidget.prototype.loadMenuWidgetStyles = function(){
 				"line-height: 20px;" +
 				"font-size: 15px;" +
 				"font-weight: bold;" +
-				"color: " + userinterface.color.getText() + ";" +
+				"color: " + userinterface.color.getBase() + ";" +
 			"}" +
 			".widget-menu > button:hover, .widget-menu > button.active{" +
 				"background-color: rgba(255,255,255, 0.3);" +
@@ -124,3 +128,10 @@ MenuWidget.prototype.render = function(){
 		this.element.appendChild(button);
 	}
 };
+
+function htmlWidget(html){
+	Widget.call(this);
+	this.element.innerHTML = html;
+}
+htmlWidget.prototype = Object.create(Widget.prototype);
+htmlWidget.consructor = htmlWidget;

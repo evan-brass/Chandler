@@ -78,7 +78,7 @@ LayoutTabs.constructor = LayoutTabs;
 LayoutTabs.prototype.addChild = function(tabName, item){
 	tabName = tabName || this.tabNames[0];
 	this.children.push(item);
-	this.tabs[tabName].appendChild(item);
+	this.tabs[tabName].appendChild(item.element);
 };
 LayoutTabs.prototype.removeChild = function(){
 	if(this.children.indexOf(child) != -1){
@@ -104,6 +104,8 @@ LayoutTabs.prototype.loadLayoutTabsStyles = function(){
 				"box-sizing: border-box;" +
 			"}",
 		"LayoutTabs-page" : ".layout-tabs > .page{" +
+				"box-sizing: border-box;" +
+				"padding: 20px;" +
 				"position: absolute;" +
 				"left: 0;" +
 				"top: 40px;" +

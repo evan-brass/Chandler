@@ -2,5 +2,15 @@ vendor/
 composer.lock
 composer.json
 vendor/ *
+
+bower_components/
+bower_components/ *
+
+node_modules/
+node_modules/ *
+
+release/
+debug/
+
 .settings/
 .settings/ *

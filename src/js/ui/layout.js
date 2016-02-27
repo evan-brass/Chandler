@@ -66,7 +66,7 @@ function LayoutTabs(tabNames){
 		this.tabs[this.tabNames[i]] = page;
 		this.element.appendChild(page);
 	}
-	this.menu = new MenuWidget(this.tabNames, this.newActiveTab.bind(this));
+	this.menu = new Widgets.MenuWidget(this.tabNames, this.newActiveTab.bind(this));
 	this.children.push(this.menu);
 	this.element.appendChild(this.menu.element);
 

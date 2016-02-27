@@ -1,6 +1,7 @@
-"use strict";
+// jshint strict:false
 
 function Event(date, description) {
+	"use strict";
 	this.date = date || new Date();
 	this.description = description || "";
 	this.type = "event";
@@ -54,7 +55,7 @@ window.calendar = {
 	monthNames : ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
 	dayNames : ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
 	daysInMonth : function(month, year) {
-		var year = year || 2015;
+		year = year || 2015;
 		// Default to a non leap year.
 		if ([8, 3, 5, 10].indexOf(month) != -1) {// These are months with 30 days: September, April, June, November
 			return 30;
@@ -69,9 +70,9 @@ window.calendar = {
 		}
 	},
 	isLeapYear : function(year) {
-		if (year % 4 == 0 && year % 100 != 0) {
+		if (year % 4 === 0 && year % 100 !== 0) {
 			return true;
-		} else if (year % 400 == 0) {
+		} else if (year % 400 === 0) {
 			return true;
 		} else {
 			return false;
@@ -103,17 +104,17 @@ window.calendar = {
 		var today = new Date();
 		var days = this.daysInMonth(today.getMonth(), today.getFullYear());
 		var curDay = this.getFirstDay(today.getMonth(), today.getFullYear());
-		// this is element
+		function getDaysEvents(date, event) {
+			var eventDate = new Date(event.date);
+			if (date.getFullYear() == eventDate.getFullYear() && date.getMonth() == eventDate.getMonth() && date.getDate() == eventDate.getDate()) {
+				return true;
+			} else {
+				return false;
+			}
+		}
 		for (var i = 1; i <= days; ++i) {
 			var date = new Date(today.getFullYear(), today.getMonth(), i);
-			var daysEvents = this.events.items.filter( function(date, event) {
-				var eventDate = new Date(event.date);
-				if (date.getFullYear() == eventDate.getFullYear() && date.getMonth() == eventDate.getMonth() && date.getDate() == eventDate.getDate()) {
-					return true;
-				} else {
-					return false;
-				}
-			}.bind(this, date), this);
+			var daysEvents = this.events.items.filter( getDaysEvents.bind(this, date), this);
 			if( typeof this.elements[curDay] != 'undefined'){
 				var element = this.elements[curDay];
 				if (i == today.getDate()) {

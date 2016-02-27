@@ -1,0 +1,29 @@
+{
+  "name": "chandler-pim",
+  "version": "1.0.0",
+  "description": "My attempt at recreating the chandler PIM",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/whiteScripter/Chandler.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/whiteScripter/Chandler/issues"
+  },
+  "homepage": "https://github.com/whiteScripter/Chandler#readme",
+  "devDependencies": {
+    "autoprefixer": "^6.3.1",
+    "grunt": "^0.4.5",
+    "grunt-contrib-clean": "^0.7.0",
+    "grunt-contrib-concat": "^0.5.1",
+    "grunt-contrib-copy": "^0.8.2",
+    "grunt-contrib-jshint": "^0.12.0",
+    "grunt-postcss": "^0.7.1",
+    "stylelint": "^4.2.0"
+  }
+}

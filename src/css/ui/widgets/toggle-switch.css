@@ -1,0 +1,40 @@
+.toggle-switch {
+	position: relative;
+	padding-left: 2.5em;
+}
+.toggle-switch input[type="checkbox"] {
+	display: none;
+}
+.toggle-switch input[type="checkbox"]:checked + label::after {
+	left: 1.25em;
+}
+.toggle-switch input[type="checkbox"]:checked + label::before{
+	/*background-color: #D7263D;*/
+}
+.toggle-switch label::before {
+	transition: all .3s;
+	box-sizing: border-box;
+	content: "";
+	position: absolute;
+	left: .25em;
+	top: 0;
+	display: inline-block;
+	background-color: #eee;
+	width: 2em;
+	height: 1em;
+	border: 1px solid #aaa;
+	border-radius: .5em;
+}
+.toggle-switch label::after {
+	transition: all .3s;
+	content: "";
+	box-sizing: border-box;
+	position: absolute;
+	left: .25em;
+	top: 0;
+	background-color: #fff;
+	width: 1em;
+	height: 1em;
+	border-radius: .5em;
+	border: 1px solid #aaa;
+}

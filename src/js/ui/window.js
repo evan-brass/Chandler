@@ -5,6 +5,7 @@
  * For example, it might be worth having a few different windows for the main screen,
  */
 function Window(element, title) {
+	var WindowTitleWidget = Widgets.WindowTitleWidget; // Bad design but I think it will work for now.
 	if (!Window.prototype.stylesLoaded) {
 		var styles = {
 			"Window" : ".window{" +

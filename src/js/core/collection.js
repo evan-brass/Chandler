@@ -2,6 +2,14 @@
 
 function Collection(filterName, filterArguments){
 	RepositoryItem.call(this);
+
+	this.on || Eventable(Collection); // If we haven't made the Collection class eventable then we do that now
+
+	if(typeManager.isRegistered('Collection')){
+		typeManager.registerType("Collection", Collection, {"filterName": "somename", "filterArguments": "someargs"});
+	}
+
+
 	this.filterName = filterName || "FilterGetAll"; // The default collection is everything in the repository.
 	this.filterArguments = filterArguments || []; // The default filter function doesn't require any arguments.
 	Object.defineProperty(this, "items", {
@@ -14,7 +22,6 @@ function Collection(filterName, filterArguments){
 }
 Collection.prototype = Object.create(RepositoryItem.prototype);
 Collection.constructor = Collection;
-Eventable(Collection);
 Collection.prototype.update = function(input){
 	var previousItems = this.items.slice();
 	input = input || this.repository.everything();
@@ -23,13 +30,12 @@ Collection.prototype.update = function(input){
 		this.trigger("change");
 	}
 };
-typeManager.registerType("Collection", Collection, {"filterName": "somename", "filterArguments": "someargs"});
 // I've removed the toJSON function.  As long as all variables that shouldn't
 // appear in the Stringify object should be added using Object.prototype with enumerable equal to false.
 
 
 /**
- * These are filter functions. They allow the collection to choose what kinds of items are in it.
+ * These are filter functions. They allow the collection to choose what items are in it.
  * Some are a simple as a list of IDs but others can be as complex as a function that analyzes the
  * attributes of the items.  This could be used to collect all of the items in the repository that
  * have a certain type or have a certain attribute value.

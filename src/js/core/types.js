@@ -27,6 +27,14 @@ function TypeManager() {
 TypeManager.prototype = {};
 TypeManager.constructor = TypeManager;
 
+TypeManager.prototype.isRegistered = function(name){
+	if (this.types.indexOf(this.getType(typename)) != -1){
+		return true;
+	} else {
+		return false;
+	}
+};
+
 TypeManager.prototype.registerType = function(typename, constructor, sample) {
 	if (this.types.indexOf(this.getType(typename)) != -1) {
 		var er = new Error("TypeManager: This type has already been registered.  It must be unregistered before reregistration.");
@@ -54,7 +62,7 @@ TypeManager.prototype.unregisterType = function(typename) {
 };
 
 TypeManager.prototype.registerConverter = function(fromType, toType, func) {
-	if (this.constructors[fromType + "-" + toType]) {
+	if (this.converters[fromType + "-" + toType]) {
 		var er = new Error("TypeManager: There is already a converter from: " + fromType + " to " + toType);
 		console.warn(er);
 		return er;
@@ -88,12 +96,9 @@ TypeManager.prototype.whatIs = function(object) {
 				wereGood = false;
 				break;
 			}
-		}// All keys are present
+		}// All keys are present and have the correct value
 		if (wereGood) {
 			return typeName;
-		} else {
-			// Unknown is an actual type registered by the typeManager.  It just doesn't do anything.
-			return "unknown";
 		}
 	}
 	var er = new Error("TypeManager: An object that doesn't fit any registered type has been found!");
@@ -111,8 +116,8 @@ TypeManager.prototype.getType = function(typeName) {
 	return {};
 };
 
-TypeManager.prototype.convert = function(object, newType) {
-	var objType = this.whatIs(object);
+TypeManager.prototype.convert = function(object, newType, oldType) {
+	var objType = oldType || this.whatIs(object);
 	if (this.converters[objType + "-" + newType]) {
 		return this.converters[objType + "-" + newType](object);
 	} else {// Default conversion
@@ -124,7 +129,7 @@ TypeManager.prototype.convert = function(object, newType) {
 
 TypeManager.prototype.parse = function(object) {
 	// Help our object find it's true calling
-	return this.convert(object, this.whatIs(object));
+	return this.convert(object, this.whatIs(object), "Json");
 };
 
 TypeManager.prototype.isA = function(object, type) {

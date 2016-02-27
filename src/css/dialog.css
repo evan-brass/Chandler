@@ -1,0 +1,85 @@
+.dialog {
+	overflow: hidden;
+	font-family: 'Open Sans', sans-serif;
+	box-shadow: #777 0 0 10px;
+	position: fixed;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
+	z-index: 101;
+	min-width: 200px;
+	min-height: 50px;
+	text-align : center;
+}
+.dialog .message {
+	padding: 0 30px;
+}
+.dialog .title {
+	padding: 10px 30px;
+	background-color: #ccc;
+	text-align: left;
+	font-weight: bold;
+	color: red;
+}
+.dialog button {
+	transition: all .3s;
+	padding: 5px;
+	margin: 5px;
+	background-color: transparent;
+	font-weight: bold;
+	width: 90px;
+}
+.dialog .ok {
+	color: red;
+	border: 1px solid red;
+}
+.dialog .ok:hover {
+	background-color: red;
+	color: #fff;
+}
+.dialog .yes {
+	color: #50cc60;
+	border: 1px solid #50cc60;
+}
+.dialog .yes:hover {
+	background-color: #50cc60;
+	color: #fff;
+}
+.dialog .done {
+	color: #4f76cc;
+	border: 1px solid #4f76cc;
+}
+.dialog .done:hover {
+	background-color: #4f76cc;
+	color: #fff;
+}
+.dialog .no {
+	color: #ce3520;
+	border: 1px solid #ce3520;
+}
+.dialog .no:hover {
+	background-color: #ce3520;
+	color: #fff;
+}
+.dialog .cancel {
+	color: #ce812e;
+	border: 1px solid #ce812e;
+}
+.dialog .cancel:hover {
+	background-color: #ce812e;
+	color: #fff;
+}
+#overlay {
+	background-color: #000;
+	z-index: 100;
+	opacity: .5;
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	display: none;
+}
+#overlay.active {
+	display: block;
+}

@@ -11,7 +11,7 @@ function Repository(id){
 	    });
 	    return uuid;
 	};
-	this.updateCollections = function(){ // doesn't affect the repository: no change event
+	this.updateCollections = function(){
 		this.trigger('change', this.everything());
 	};
 	this.saveItem = function(item){ // This does affect the repository: fire a change event

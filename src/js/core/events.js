@@ -37,7 +37,7 @@ function Eventable(object) {
 				this.events = {};
 			}
 		};
-	object.prototype.trigger = function() {
+	object.prototype.trigger = function() { // should be called with (EventName, [ArgumentsToPassToListeners, ...])
 			if(!this.events){
 				Object.defineProperty(this, "events", {
 					value : {},

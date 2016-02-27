@@ -1,0 +1,48 @@
+@CHARSET "ISO-8859-1";
+
+/* Widget - Switch */
+input[type="checkbox"].switch {
+	display: none;
+}
+
+input[type="checkbox"].switch+label {
+	margin: 0 .5em 0 .5em;
+	display: inline-block;
+	position: relative;
+	content: "";
+	transition: background-color .3s;
+	width: 2em;
+	height: 1em;
+	background-color: #eee;
+}
+
+input[type="checkbox"].switch+label::after {
+	box-sizing: border-box;
+	transition: left .3s;
+	top: 0;
+	left: 0;
+	display: block;
+	content: "";
+	position: absolute;
+	width: 1em;
+	height: 1em;
+	background-color: #fff;
+	border: 1px solid #ddd;
+}
+
+input[type="checkbox"].switch:checked+label::after {
+	left: 1em;
+}
+
+input[type="checkbox"].switch:checked+label {
+	background-color: #4f76cc;
+}
+
+/* Widget Switch On-Off */
+input[type="checkbox"].switch.on-off+label {
+	background-color: #ce3520;
+}
+
+input[type="checkbox"].switch.on-off:checked+label {
+	background-color: #54d866;
+}
